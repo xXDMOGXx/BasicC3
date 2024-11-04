@@ -1,37 +1,46 @@
-#ifndef BOT_MAIN_CPP
-#define BOT_MAIN_CPP
+#ifndef CHESSBOT_MAIN_CPP
+#define CHESSBOT_MAIN_CPP
 
 #include "Arduino.h"
 #include "logging.h"
-#include "accessPoint.h"
+#include "wireless.h"
 #include "connection.h"
 #include "timer.h"
-#include "motor.h"
+#include "control.h"
 #include "status.h"
 
-using namespace Bot;
+using namespace ChessBot;
 
 void setup() {
   if (getLoggingStatus) {
     // Serial port for debugging purposes
     Serial.begin(115200);
-    delay(3000);
   }
 
-  // Any setup needed to get motors ready
-  setupMotors();
-
+  // Any setup needed to get bot ready
+  setupBot();
   // Create a WiFi network for the laptop to connect to
-  createAccessPoint();
+  connectWiFI();
 }
 
 void loop() {
 	if (getConnectionStatus()) {
-		connectionTest();
+		//connectionTest();
 		acceptData();
 	}
 
-  	delay(10);
+    std::array<int, 4> lightValues = returnLightLevels();
+
+    log((char*)"Light Levels: ");
+    log(lightValues[0]);
+    log((char*)" ");
+    log(lightValues[1]);
+    log((char*)" ");
+    log(lightValues[2]);
+    log((char*)" ");
+    logln(lightValues[3]);
+
+  	delay(100);
   	timerStep();
 }
 

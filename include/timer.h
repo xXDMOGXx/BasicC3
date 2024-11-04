@@ -1,9 +1,9 @@
-#ifndef BOT_TIMER_H
-#define BOT_TIMER_H
+#ifndef CHESSBOT_TIMER_H
+#define CHESSBOT_TIMER_H
 
 #include <vector>
 
-namespace Bot
+namespace ChessBot
 {
     using TimerCallback = void (*)();
     struct Timer {

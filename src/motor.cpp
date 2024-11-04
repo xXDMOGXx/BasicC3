@@ -1,32 +1,40 @@
-#ifndef BOT_MOTOR_CPP
-#define BOT_MOTOR_CPP
+#ifndef CHESSBOT_MOTOR_CPP
+#define CHESSBOT_MOTOR_CPP
 
 #include "motor.h"
 
 #include "Arduino.h"
-#include "status.h"
+#include "pwm.h"
+#include "config.h"
 
-namespace Bot
+namespace ChessBot
 {
     void setupMotors() {
-        // Any setup needed to get motors working
+        setupPWM(MOTOR_A_PIN1, 1);
+        setupPWM(MOTOR_A_PIN2, 2);
+        setupPWM(MOTOR_B_PIN1, 3);
+        setupPWM(MOTOR_B_PIN2, 4);
     }
 
-    void setLeftPower(int power) {
-        if (getDriveStatus()) {
-            // Code needed to turn left motor
+    // Value between [-1, 1]
+    void setLeftPower(float power) {
+        if (power > 0) {
+            writePWM(2, 0);
+            writePWM(1, mapPowerToDuty(power));
+        } else {
+            writePWM(1, 0);
+            writePWM(2, mapPowerToDuty(-power));
         }
     }
 
-    void setRightPower(int power) {
-        if (getDriveStatus()) {
-            // Code needed to turn right motor
-        }
-    }
-
-    void setWeaponPower(int power) {
-        if (getWeaponStatus()) {
-            // Code needed to turn weapon motor
+    // Value between [-1, 1]
+    void setRightPower(float power) {
+        if (power > 0) {
+            writePWM(4, 0);
+            writePWM(3, mapPowerToDuty(power));
+        } else {
+            writePWM(3, 0);
+            writePWM(4, mapPowerToDuty(-power));
         }
     }
 };

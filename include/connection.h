@@ -1,9 +1,9 @@
-#ifndef BOT_CONNECTION_H
-#define BOT_CONNECTION_H
+#ifndef CHESSBOT_CONNECTION_H
+#define CHESSBOT_CONNECTION_H
 
 #include "Arduino.h"
 
-namespace Bot
+namespace ChessBot
 {
     void connect();
     void disconnect();

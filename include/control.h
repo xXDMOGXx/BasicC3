@@ -1,16 +1,13 @@
-#ifndef BOT_CONTROL_H
-#define BOT_CONTROL_H
+#ifndef CHESSBOT_CONTROL_H
+#define CHESSBOT_CONTROL_H
 
-namespace Bot
+namespace ChessBot
 {
-    void enableWeapon();
-    void disableWeapon();
-
-    void enableDrive();
-    void disableDrive();
-
-    void enableAuto();
-    void disableAuto();
+    void setupBot();
+    void drive(float tiles);
+    void drive(float leftPower, float rightPower);
+    void stop();
+    std::array<int, 4> returnLightLevels();
 };
 
 #endif

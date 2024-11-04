@@ -1,12 +1,12 @@
-#ifndef BOT_LOGGING_CPP
-#define BOT_LOGGING_CPP
+#ifndef CHESSBOT_LOGGING_CPP
+#define CHESSBOT_LOGGING_CPP
 
 #include "logging.h"
 
 #include "Arduino.h"
 #include "status.h"
 
-namespace Bot
+namespace ChessBot
 {
     void log(char message[]) {
         if (getLoggingStatus()) {

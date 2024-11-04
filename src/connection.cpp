@@ -1,5 +1,5 @@
-#ifndef BOT_CONNECTION_CPP
-#define BOT_CONNECTION_CPP
+#ifndef CHESSBOT_CONNECTION_CPP
+#define CHESSBOT_CONNECTION_CPP
 
 #include "connection.h"
 
@@ -7,35 +7,29 @@
 #include "logging.h"
 #include "timer.h"
 #include "control.h"
-#include "motor.h"
 #include "status.h"
+#include "../env.h"
 
 #include "WiFi.h"
 
-namespace Bot
+namespace ChessBot
 {
+    // These are the various different supported message types that can be sent over TCP
     enum MESSAGE_TYPE {
         HANDSHAKE_REQUEST,
-        HANDSHAKE_ACCEPTED,
+        HANDSHAKE_RESPONSE,
         PING_REQUEST,
-        PING_RESPONDED,
-        DISABLE_WEAPON,
-        ENABLE_WEAPON,
-        DISABLE_DRIVE,
-        ENABLE_DRIVE,
-        SEND_LEFT,
-        SEND_RIGHT,
-        SEND_WEAPON,
-        ENABLE_AUTO,
-        DISABLE_AUTO
+        PING_RESPONSE,
+        QUERY_VAR,
+        QUERY_RESPONSE,
+        SET_VAR,
+        TURN_BY_ANGLE,
+        DRIVE_TILES,
+        ACTION_SUCCESS,
+        ACTION_FAIL,
+        DRIVE_TANK,
+        ESTOP,
     };
-
-    constexpr static char IP[] = "192.168.4.2";
-    constexpr static int PORT = 61134;
-    constexpr static bool DO_HANDSHAKE = true;
-    constexpr static int HANDSHAKE_INTERVAL = 3000;
-    constexpr static bool DO_PINGING = true;
-    constexpr static int PING_INTERVAL = 1000;
 
     WiFiClient client;
     bool pinging = false;
@@ -44,7 +38,7 @@ namespace Bot
     void connect() {
         setConnectionStatus(false);
         logln((char*)"Connecting to Server...");
-        if (!client.connect(IP, PORT)) {
+        if (!client.connect(SERVER_IP, SERVER_PORT)) {
             logln((char*)"Connection Failed! Retrying...");
             timerDelay(5000, &connect);
         } else {
@@ -92,49 +86,23 @@ namespace Bot
 
     void handleMessage(std::array<int, 32>& message) {
         switch (message[0]) {
-            case HANDSHAKE_ACCEPTED:
+            case HANDSHAKE_RESPONSE:
                 if (!getConnectionStatus()) {
                     // Server accepted the handshake
                     setConnectionStatus(true);
                     logln((char*)"Accepted!");
-                    setDriveStatus(true);
-                    setWeaponStatus(true);
                     pingServer();
                 }
                 break;
-            case PING_RESPONDED:
+            case PING_RESPONSE:
                 pinging = false;
                 if (pingFailed) {
                     logln((char*)"Pinging Restored!");
                     pingFailed = false;
                 }
                 break;
-            case DISABLE_WEAPON:
-                disableWeapon();
-                break;
-            case ENABLE_WEAPON:
-                enableWeapon();
-                break;
-            case DISABLE_DRIVE:
-                disableDrive();
-                break;
-            case ENABLE_DRIVE:
-                enableDrive();
-                break;
-            case SEND_LEFT:
-                setLeftPower(message[1]);
-                break;
-            case SEND_RIGHT:
-                setRightPower(message[1]);
-                break;
-            case SEND_WEAPON:
-                setWeaponPower(message[1]);
-                break;
-            case ENABLE_AUTO:
-                enableAuto();
-                break;
-            case DISABLE_AUTO:
-                disableAuto();
+            case DRIVE_TANK:
+                drive(message[1], message[2]);
                 break;
         }
     }

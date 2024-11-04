@@ -1,5 +1,5 @@
-#ifndef BOT_TIMER_CPP
-#define BOT_TIMER_CPP
+#ifndef CHESSBOT_TIMER_CPP
+#define CHESSBOT_TIMER_CPP
 
 #include "timer.h"
 
@@ -11,7 +11,7 @@
 // How to pass function from within a class (Uses a lambda that captures the class' pointer)
 // [this](){ func(); }
 
-namespace Bot
+namespace ChessBot
 {
     std::vector<Timer> timers;
 

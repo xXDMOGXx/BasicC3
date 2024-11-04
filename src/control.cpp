@@ -1,53 +1,36 @@
-#ifndef BOT_CONTROL_CPP
-#define BOT_CONTROL_CPP
+#ifndef CHESSBOT_CONTROL_CPP
+#define CHESSBOT_CONTROL_CPP
 
 #include "control.h"
 
 #include "Arduino.h"
-#include "logging.h"
 #include "motor.h"
-#include "status.h"
+#include "lightSensor.h"
 
-namespace Bot
+namespace ChessBot
 {
-    void enableWeapon() {
-        setWeaponStatus(true);
-        setWeaponPower(-100);
-        logln((char*)"Weapon Enabled!");
+    void setupBot() {
+        setupMotors();
+        setupIR();
+        activateIR();
     }
 
-    void disableWeapon() {
-        setWeaponPower(-100);
-        setWeaponStatus(false);
-        logln((char*)"Weapon Disabled!");
+    void drive(float tiles) {
+
     }
 
-    void enableDrive() {
-        setDriveStatus(true);
+    void drive(float leftPower, float rightPower) {
+        setLeftPower(leftPower);
+        setRightPower(rightPower);
+    }
+
+    void stop() {
         setLeftPower(0);
         setRightPower(0);
-        logln((char*)"Drive Enabled!");
     }
 
-    void disableDrive() {
-        setLeftPower(0);
-        setRightPower(0);
-        setDriveStatus(false);
-        logln((char*)"Drive Disabled!");
-    }
-
-    void enableAuto() {
-        enableWeapon();
-        enableDrive();
-        setAutoStatus(true);
-        logln((char*)"Autonomous Enabled!");
-    }
-
-    void disableAuto() {
-        disableWeapon();
-        disableDrive();
-        setAutoStatus(false);
-        logln((char*)"Autonomous Disabled!");
+    std::array<int, 4> returnLightLevels() {
+        return readLightLevels();
     }
 };
 

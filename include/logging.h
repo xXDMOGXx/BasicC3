@@ -1,7 +1,7 @@
-#ifndef BOT_LOGGING_H
-#define BOT_LOGGING_H
+#ifndef CHESSBOT_LOGGING_H
+#define CHESSBOT_LOGGING_H
 
-namespace Bot
+namespace ChessBot
 {
     void log(char message[]);
     void log(int value);
